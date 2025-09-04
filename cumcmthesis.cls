@@ -41,10 +41,8 @@ Just choose `xelatex', no `pdflatex' or `latex' and so on.}
 % 页面布局
 \RequirePackage{geometry}
 % 数学宏包
+\RequirePackage{unicode-math}
 \RequirePackage{amsmath}
-\RequirePackage{amsfonts}
-\RequirePackage{amssymb}
-\RequirePackage{bm}
 %\RequirePackage{titletoc}
 % 设置颜色
 \RequirePackage{xcolor}
@@ -151,14 +149,32 @@ Just choose `xelatex', no `pdflatex' or `latex' and so on.}
 	{\mcm@endoldtabular\egroup}
 % 每行缩进两个汉字
 \setlength\parindent{2em}
+
 % 设置字体
-\setmainfont{Times New Roman}
-%\setmonofont{Courier New}
-\setsansfont{Arial}
-\setCJKfamilyfont{kai}[AutoFakeBold]{simkai.ttf}
+\setmainfont[
+    Path=fonts/Times New Roman/,
+    UprightFont=Times New Roman.ttf,
+    BoldFont=Times New Roman - Bold.ttf,
+    ItalicFont=Times New Roman - Italic.ttf,
+    BoldItalicFont=Times New Roman - Bold Italic.ttf
+]{TimesNewRoman}
+
+\setsansfont[
+    Path=fonts/Arial/,
+    UprightFont=arial.ttf,
+    BoldFont=arialbd.ttf,
+    ItalicFont=ariali.ttf,
+    BoldItalicFont=arialbi.ttf
+]{Arial}
+
+\setCJKfamilyfont{kai}[AutoFakeBold,Path=fonts/SimKai/]{simkai.ttf}
 \newcommand*{\kai}{\CJKfamily{kai}}
-\setCJKfamilyfont{song}[AutoFakeBold]{SimSun}
+\setCJKfamilyfont{song}[AutoFakeBold,Path=fonts/SimSun/]{simsun.ttc}
 \newcommand*{\song}{\CJKfamily{song}}
+
+% 设置数学字体
+\setmathfont[Path=fonts/Latin Modern Math/]{LatinModernMath-Regular.otf}
+
 
 \renewcommand\normalsize{%
 	\@setfontsize\normalsize{12.05}{14.45}%
