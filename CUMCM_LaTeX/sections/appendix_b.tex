@@ -1,0 +1,92 @@
+\section{附录：支撑材料目录}
+
+本附录列出了所有支撑材料和代码文件的组织结构。
+
+\subsection{代码实现目录}
+
+\subsubsection{第一问实现代码}
+\begin{itemize}
+    \item \textbf{CUMCM\_A\_1\_m/} - MATLAB实现版本
+    \begin{itemize}
+        \item \texttt{shiyitu.m} - 三维阴影投影可视化
+        \item \texttt{shiyitu2.m} - 二维投影圆可视化
+        \item \texttt{yunxingdaima.m} - 点到直线距离计算
+    \end{itemize}
+    \item \textbf{CUMCM\_A\_1\_py/} - Python实现版本
+    \begin{itemize}
+        \item \texttt{main.py} - 主程序入口
+        \item \texttt{config.py} - 配置参数
+        \item \texttt{kinematics.py} - 运动学计算
+        \item \texttt{occlusion\_geometry.py} - 遮挡几何计算
+        \item \texttt{solver.py} - 求解器实现
+        \item \texttt{visualize.py} - 可视化模块
+        \item \texttt{venv/} - Python虚拟环境
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{第二问实现代码}
+\begin{itemize}
+    \item \textbf{CUMCM\_A\_2\_m/} - 单无人机多目标优化
+    \begin{itemize}
+        \item \texttt{main\_multi.m} - 主优化程序
+        \item \texttt{ga\_multi.m} - 多目标遗传算法
+        \item \texttt{objective\_function.m} - 目标函数定义
+        \item \texttt{objective\_function\_multi.m} - 多目标函数
+        \item \texttt{constraint\_effective\_jamming.m} - 约束条件
+        \item \texttt{initialize\_population\_multi.m} - 种群初始化
+        \item \texttt{tournament\_selection\_multi.m} - 锦标赛选择
+        \item \texttt{sbx\_crossover.m} - SBX交叉算子
+        \item \texttt{polynomial\_mutation.m} - 多项式变异
+        \item \texttt{sort\_population.m} - 种群排序
+        \item \texttt{generate\_random\_target.m} - 随机目标生成
+        \item \texttt{visualize\_combined.m} - 综合可视化
+        \item \texttt{GPU\_Usage\_Guide.md} - GPU使用指南
+        \item \texttt{images/} - 结果图像文件夹
+        \item \texttt{multi\_objective\_results.mat} - 优化结果数据
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{第三问实现代码}
+\begin{itemize}
+    \item \textbf{CUMCM\_A\_3\_m/} - 三颗烟雾弹序列优化
+    \begin{itemize}
+        \item \texttt{main\_multi.m} - 主优化程序
+        \item \texttt{ga\_multi.m} - 遗传算法实现
+        \item \texttt{objective\_function.m} - 单目标函数
+        \item \texttt{objective\_function\_multi.m} - 多目标函数
+        \item \texttt{constraint\_effective\_jamming.m} - 有效干扰约束
+        \item \texttt{compute\_interference\_series.m} - 干扰序列计算
+        \item \texttt{export\_results\_to\_excel.m} - 结果导出
+        \item \texttt{visualize\_results\_3\_bombs.m} - 三弹可视化
+        \item \texttt{plot\_*\_analysis.m} - 各类分析图表
+        \item \texttt{run\_all\_visualizations.m} - 批量可视化
+        \item \texttt{images/} - 分析图像
+        \item \texttt{CUMCM\_A\_3.xlsx} - 结果数据表
+        \item \texttt{result1.xlsx} - 详细结果
+        \item \texttt{convergence\_history.mat} - 收敛历史
+        \item \texttt{multi\_objective\_results\_3\_bombs.mat} - 优化结果
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{第四问实现代码}
+\begin{itemize}
+    \item \textbf{CUMCM\_A\_4\_m/} - 三架无人机协同优化
+    \begin{itemize}
+        \item \texttt{main\_multi.m} - 主协同优化程序
+        \item \texttt{ga\_multi.m} - 多机遗传算法
+        \item \texttt{objective\_function\_3uav.m} - 三机目标函数
+        \item \texttt{objective\_function\_multi.m} - 多目标函数
+        \item \texttt{evaluate\_solution\_on\_all\_targets.m} - 全目标评估
+        \item \texttt{constraint\_effective\_jamming.m} - 干扰约束
+        \item \texttt{create\_result3\_excel.m} - 结果表创建
+        \item \texttt{fill\_result3\_to\_excel.m} - 结果填充
+        \item \texttt{plot\_*\_analysis.m} - 各类分析图表
+        \item \texttt{visualize\_results.m} - 结果可视化
+        \item \texttt{images/} - 分析图像
+        \item \texttt{CUMCM\_A\_4.xlsx} - 结果数据表
+    \end{itemize}
+\end{itemize}
+
+\subsection{数据}
+
+\subsection{AI使用说明}

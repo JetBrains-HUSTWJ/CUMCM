@@ -1,0 +1,229 @@
+\section{附录：核心代码}
+
+本附录包含四个问题的五个核心算法实现代码。
+
+\subsection{第一问解法一：三维阴影投影算法}
+
+\begin{lstlisting}[language=Matlab,caption={第一问解法一：三维阴影投影核心代码}]
+% 球体和光源参数
+sphere_radius = 0.2;
+sphere_center = [8, 0, 4.6];
+light_source = [9.5, 0, 4.5];
+
+% 创建网格
+grid_size = 300;
+y_range = linspace(-5, 5, grid_size);
+z_range = linspace(0, 10, grid_size);
+[Y, Z] = meshgrid(y_range, z_range);
+shadow_map = zeros(grid_size, grid_size);
+
+% 计算阴影投影
+for i = 1:grid_size
+    for j = 1:grid_size
+        point_on_plane = [0, Y(i,j), Z(i,j)];
+        ray_vector = point_on_plane - light_source;
+        ray_length = norm(ray_vector);
+        
+        if ray_length < 1e-10
+            continue;
+        end
+        
+        ray_direction = ray_vector / ray_length;
+        oc = light_source - sphere_center;
+        
+        % 射线与球体相交检测
+        a = dot(ray_direction, ray_direction);
+        b = 2 * dot(oc, ray_direction);
+        c = dot(oc, oc) - sphere_radius^2;
+        discriminant = b^2 - 4*a*c;
+        
+        if discriminant < 0
+            continue;
+        end
+        
+        t1 = (-b - sqrt(discriminant)) / (2*a);
+        t2 = (-b + sqrt(discriminant)) / (2*a);
+        
+        if (t1 > 0 && t1 < ray_length) || (t2 > 0 && t2 < ray_length)
+            shadow_map(i,j) = 1;
+        end
+    end
+end
+\end{lstlisting}
+
+\subsection{第一问解法二：点到直线距离算法}
+
+\begin{lstlisting}[language=Matlab,caption={第一问解法二：点到直线距离核心代码}]
+% 定义符号变量
+syms t real;
+
+% 导弹和目标轨迹
+P1 = [18477.5931-298.5111571*t, 0, 1847.75931-29.85111571*t];
+P2 = [0, 207, 0];
+P3 = [0, 207, 10];
+Q = [17188, 0, 1736.496-3*t];
+
+% 计算点到直线距离
+v = P2 - P1;
+w = Q - P1;
+cross_vw = cross(v, w);
+norm_cross = norm(cross_vw);
+norm_v = norm(v);
+dis = norm_cross / norm_v;
+
+% 计算第二条边的距离
+v1 = P3 - P1;
+cross_v1w = cross(v1, w);
+norm_cross1 = norm(cross_v1w);
+norm_v1 = norm(v1);
+dis1 = norm_cross1 / norm_v1;
+
+% 转换为数值函数并求解
+dis_func = matlabFunction(dis);
+t_range = linspace(0, 4.3535830038, 100000);
+dis_values = arrayfun(dis_func, t_range);
+dis_func1 = matlabFunction(dis1);
+dis_values1 = arrayfun(dis_func1, t_range);
+
+% 找到满足条件的时间范围
+valid_indices = find(dis_values <= 10 & dis_values1 <= 10);
+valid_t = t_range(valid_indices);
+\end{lstlisting}
+
+\subsection{第二问：单无人机多目标遗传算法优化}
+
+\begin{lstlisting}[language=Matlab,caption={第二问核心优化代码}]
+% 物理参数初始化
+G = 9.8;  % 重力加速度
+P_M1_INITIAL = [20000.0, 0.0, 2000.0];  % 导弹初始位置
+P_FY1_INITIAL = [17800.0, 0.0, 1800.0]; % 无人机初始位置
+ORIGIN = [0.0, 0.0, 0.0];               % 假目标位置
+
+% 目标和云团参数
+TARGET_RADIUS = 7.0;
+TARGET_HEIGHT = 10.0;
+SPEED_M1 = 300.0;
+CLOUD_RADIUS = 10.0;
+CLOUD_EFFECTIVE_DURATION = 20.0;
+CLOUD_SINK_SPEED = 3.0;
+
+% 遗传算法参数
+POP_SIZE = 400;
+MAX_GENERATIONS = 200;
+CROSSOVER_RATE = 0.8;
+MUTATION_RATE = 0.1;
+ELITE_COUNT = 20;
+
+% 优化变量范围 [方向角, 速度, 释放时间, 爆炸延迟]
+BOUNDS = [
+    0, pi;      % 飞行方向角 (rad)
+    70, 140;    % 飞行速度 (m/s)
+    0, 5;       % 释放时间 (s)
+    0, 5        % 爆炸延迟 (s)
+];
+
+% 目标采样策略
+TOTAL_POINTS = 2000;
+SAMPLE_POINTS = 400;
+sample_indices = round(linspace(1, TOTAL_POINTS, SAMPLE_POINTS));
+
+% 执行多目标遗传算法优化
+[best_position, best_value, covered_targets] = ga_multi(BOUNDS, POP_SIZE, ...
+    MAX_GENERATIONS, CROSSOVER_RATE, MUTATION_RATE, ELITE_COUNT, ...
+    P_M1_INITIAL, P_FY1_INITIAL, ORIGIN, SPEED_M1, ...
+    CLOUD_SINK_SPEED, CLOUD_EFFECTIVE_DURATION, CLOUD_RADIUS, G, ...
+    sample_indices, MISSILE_UNIT_TO_FAKE, use_gpu);
+\end{lstlisting}
+
+\subsection{第三问：三颗烟雾弹序列投放优化}
+
+\begin{lstlisting}[language=Matlab,caption={第三问核心优化代码}]
+% 场景参数
+G = 9.8;
+P_M1_INITIAL = [20000.0, 0.0, 2000.0];
+P_FY1_INITIAL = [17800.0, 0.0, 1800.0];
+ORIGIN = [0.0, 0.0, 0.0];
+
+% 目标和云团参数
+TARGET_CENTER_BOTTOM = [0.0, 200.0, 0.0];
+TARGET_RADIUS = 7.0;
+TARGET_HEIGHT = 10.0;
+SPEED_M1 = 300.0;
+CLOUD_RADIUS = 10.0;
+CLOUD_EFFECTIVE_DURATION = 20.0;
+CLOUD_SINK_SPEED = 3.0;
+
+% 遗传算法参数
+POP_SIZE = 200;
+MAX_GENERATIONS = 20;
+
+% 三颗烟雾弹的优化变量范围
+BOUNDS = [
+    -pi, pi;     % theta: 飞行方向角 (rad)
+    70, 140;     % v: 飞行速度 (m/s)
+    0, 10;       % t_release1: 第一颗释放时间 (s)
+    0, 10;       % t_explode1: 第一颗爆炸延迟 (s)
+    1, 5;        % x: 第二颗间隔 (s)
+    0, 10;       % t_explode2: 第二颗爆炸延迟 (s)
+    1, 5;        % y: 第三颗间隔 (s)
+    0, 10        % t_explode3: 第三颗爆炸延迟 (s)
+];
+
+% 目标点采样
+TOTAL_POINTS = 2000;
+SAMPLE_POINTS = 200;
+sample_indices = round(linspace(1, TOTAL_POINTS, SAMPLE_POINTS));
+
+% 执行多目标优化
+[best_position, best_value, covered_targets] = ga_multi(POP_SIZE, ...
+    MAX_GENERATIONS, BOUNDS, P_M1_INITIAL, P_FY1_INITIAL, ORIGIN, ...
+    SPEED_M1, CLOUD_SINK_SPEED, CLOUD_EFFECTIVE_DURATION, ...
+    CLOUD_RADIUS, G, sample_indices);
+\end{lstlisting}
+
+\subsection{第四问：三架无人机协同优化}
+
+\begin{lstlisting}[language=Matlab,caption={第四问核心优化代码}]
+% 物理常量
+G = 9.806;
+
+% 初始条件：导弹和三架无人机位置
+P_M1_INITIAL = [20000.0, 0.0, 2000.0];
+P_FY1_INITIAL = [17800.0, 0.0, 1800.0];
+P_FY2_INITIAL = [12000.0, 1400.0, 1400.0];
+P_FY3_INITIAL = [6000.0, -3000.0, 700.0];
+ORIGIN = [0.0, 0.0, 0.0];
+
+% 目标参数
+TARGET_CENTER_BOTTOM = [0.0, 200.0, 0.0];
+TARGET_RADIUS = 7.0;
+TARGET_HEIGHT = 10.0;
+SPEED_M1 = 300.0;
+
+% 云团参数
+CLOUD_RADIUS = 10.0;
+CLOUD_EFFECTIVE_DURATION = 20.0;
+CLOUD_SINK_SPEED = 3.0;
+
+% 遗传算法参数
+POP_SIZE = 1000;
+MAX_GENERATIONS = 10000;
+
+% 三架无人机的优化变量范围
+BOUNDS_UAV1 = [-pi, pi; 70, 140; 0, 7; 0, 19];
+BOUNDS_UAV2 = [pi, 2*pi; 70, 140; 10, 70; 0, 17];
+BOUNDS_UAV3 = [0, pi; 70, 140; 22, 70; 0, 12];
+BOUNDS = [BOUNDS_UAV1; BOUNDS_UAV2; BOUNDS_UAV3];
+
+% 目标采样策略
+TOTAL_POINTS = 2000;
+SAMPLE_POINTS = 40;
+sample_indices = round(linspace(1, TOTAL_POINTS, SAMPLE_POINTS));
+
+% 执行三架无人机协同优化
+[best_position, best_value, covered_targets] = ga_multi(POP_SIZE, ...
+    MAX_GENERATIONS, BOUNDS, P_M1_INITIAL, P_FY1_INITIAL, ...
+    P_FY2_INITIAL, P_FY3_INITIAL, ORIGIN, SPEED_M1, ...
+    CLOUD_SINK_SPEED, CLOUD_EFFECTIVE_DURATION, CLOUD_RADIUS, ...
+    G, sample_indices);
+\end{lstlisting}

@@ -1,0 +1,88 @@
+\section{符号说明}
+
+\begin{table}[htbp]
+\centering
+\caption{基本物理量符号说明}
+\label{tab:symbols_basic}
+\begin{tabular}{cccc}
+\toprule
+\textbf{符号} & \textbf{说明} & \textbf{符号} & \textbf{说明} \\
+\midrule
+$P_{M1}$ & 导弹的初始位置 & $v_M$ & 导弹的飞行速度 \\
+$\mathbf{u}_M$ & 导弹的单位方向向量 & $R_M(t)$ & 导弹在时刻 $t$ 的位置 \\
+$P_{FY1}$ & 无人机FY1的初始位置 & $P_{FY_i}$ & 第$i$架无人机的初始位置，$i \in \{1,2,3\}$ \\
+$v_D$ & 无人机的飞行速度（问题一） & $v_{FY1}$ & 无人机FY1的飞行速度 \\
+$v_i$ & 第$i$架无人机的飞行速度 & $\mathbf{u}_{FY1}$ & 无人机的单位方向向量 \\
+$\theta$ & 无人机飞行方向角（弧度） & $\theta_i$ & 第$i$架无人机的飞行方向角 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{烟幕云团符号说明}
+\label{tab:symbols_cloud}
+\begin{tabular}{cccc}
+\toprule
+\textbf{符号} & \textbf{说明} & \textbf{符号} & \textbf{说明} \\
+\midrule
+$C(t)$ & 烟幕云团中心在时刻 $t$ 的位置 & $C_i(t)$ & 第$i$枚云团中心在时刻$t$位置 \\
+$r_{cloud}$ & 烟幕云团的半径 & $v_{cloud}$ & 烟幕云团的下沉速度 \\
+$t_{start,i}$ & 第$i$枚烟幕云团开始生效的时刻 & $t_{end,i}$ & 第$i$烟幕云团结束生效时刻 \\
+\multicolumn{2}{c}{$[t_{start,i}, t_{end,i}]$ 第$i$个烟幕云团的有效时间窗} & & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{烟幕弹相关符号说明}
+\label{tab:symbols_smoke}
+\begin{tabular}{cccc}
+\toprule
+\textbf{符号} & \textbf{说明} & \textbf{符号} & \textbf{说明} \\
+\midrule
+$t_{rel}$ & 烟幕弹的投放时刻 & $t_{rel,i}$ & 第$i$枚烟幕弹的投放时间 \\
+$P_{rel}$ & 烟幕弹的投放位置 & $P_{rel,i}$ & 第$i$枚烟幕弹的投放位置 \\
+$t_{det}$ & 烟幕弹的起爆时刻 & $t_{exp}$ & 烟幕弹起爆延迟（优化变量） \\
+$t_{exp,i}$ & 第$i$枚烟幕弹的起爆延迟时间 & $P_{det}$ & 烟幕弹的起爆位置 \\
+$P_{exp,i}$ & 第$i$个弹的爆炸点位置 & $x_{interval}$ & 第二枚相对第一枚投放间隔 \\
+\multicolumn{2}{c}{$y_{interval}$ 第三枚烟幕弹相对第二枚的投放间隔} & & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{优化相关符号说明}
+\label{tab:symbols_optimization}
+\begin{tabular}{cccc}
+\toprule
+\textbf{符号} & \textbf{说明} & \textbf{符号} & \textbf{说明} \\
+\midrule
+$N_{total}$ & 圆柱体表面总目标点数 & $N_{sample}$ & 优化过程中的采样点数 \\
+$T_{eff}$ & 总有效干扰时间 & $T_{eff,i}$ & 第$i$个目标点的有效遮蔽时间 \\
+$T_{eff,j}$ & 第$j$个目标点的有效干扰时间 & $\bar{T}_{eff}$ & 所有目标点的平均有效干扰时间 \\
+$\mathcal{J}_j(t)$ & 第$j$个目标点在时刻$t$的遮蔽状态 & $\rho_{coverage}$ & 目标点覆盖率 \\
+$\mathbf{x}$ & 优化变量向量 & $f_1(\mathbf{x})$ & 目标函数1：平均有效遮蔽时间 \\
+$f_2(\mathbf{x})$ & 目标函数2：目标点覆盖率 & $g_i(\mathbf{x})$ & 第$i$个约束条件 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{目标与几何符号说明}
+\label{tab:symbols_geometry}
+\begin{tabular}{cccc}
+\toprule
+\textbf{符号} & \textbf{说明} & \textbf{符号} & \textbf{说明} \\
+\midrule
+$Q$ & 真目标圆柱体表面的任意一点 & $Q_i$ & 第$i$个目标点的坐标\\
+$Q_j$ & 第$j$个随机目标点，$j \in \{1,2,\ldots,2000\}$ & $\ell(s)$ & 导弹到目标点的视线线段 \\
+$s$ & 线段参数，$s \in [0,1]$ & $d_i(t)$ & 云团导弹-目标最短距离 \\
+\multicolumn{2}{c}{$d_{i,j}(t)$ 第$i$云团导弹-第$j$目标距离} & & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
